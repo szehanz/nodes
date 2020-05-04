@@ -53,7 +53,7 @@ A “Wild Sage Node” has 1 CPU box, and one or more sensors.
 * May include: Small momentary contact pushbutton switch
 
 #### Custom Circuit Boards: 
- * WagMan V5
+ * [WagMan](https://github.com/waggle-sensor/wagman) V5
  * Stevenson sensor daughter board: Sound Level, Inertial, Pressure, Temp/RH (AoT Sensor Stack)
  
 #### Mounting:
