@@ -18,15 +18,11 @@ This identifies Waggle Nodes that are standard, commercially available blade ser
 A weatherized Waggle Node designed to be installed on a street pole in the city or mounted on exterior walls.  An AoT node usually includes a sensor pod that includes air quality sensors.  The device is also attractive for an urban setting. 
 
 
-## Types:
-* Wild Sage Node: Waggle Box (Node Controller, WagMan, Edge Processor, Networking)
-* Sage Blade: 19” HPE Rack-mounted node
-
 ## Nomenclature:
-* *B1*: 19” HPE Rack-mounted node
-* *S1*: Sage Version 1.0:  Current Waggle Node design with known modifications. 
-* *S2.0*:  Sage Version 2.0:  First small batch 2.0 nodes.  Roughly 20% of build funds.
-* *S2.1*:  Sage Version 2.1:  Production Sage nodes.2.0.
+* **B1**: 19” HPE Rack-mounted node
+* **S1**: Sage Version 1.0:  Current Waggle Node design with known modifications. 
+* **S2.0**:  Sage Version 2.0:  First small batch 2.0 nodes.  Roughly 20% of build funds.
+* **S2.1**:  Sage Version 2.1:  Production Sage nodes.2.0.
 
 A “Wild Sage Node” has 1 CPU box, and one or more sensors.
 
