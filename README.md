@@ -1,6 +1,6 @@
 # Sage Nodes
 
-#### Lead(s): [Pete Beckman](mailto:beckman@anl.gov) and [Raj Sankaran](mailto:rajesh@anl.gov)
+#### Lead(s): Pete Beckman and Raj Sankaran
 
 Any Edge node part of the Sage project is called a Sage Node.  This includes new AoT nodes, Wild Sage nodes, and Sage Blades. They 
 are each built on the [Waggle AI@Edge Platform](https://github.com/waggle-sensor/waggle).
