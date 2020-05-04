@@ -5,7 +5,7 @@ Lead(s): [Pete Beckman](mailto:beckman@anl.gov) and [Raj Sankaran](mailto:rajesh
 Any Edge node part of the Sage project is called a Sage Node.  This includes new AoT nodes, Wild Sage nodes, and Sage Blades. They 
 are each built on the [Waggle AI@Edge Platform](https://github.com/waggle-sensor/waggle).
 
-### [Waggle Node](https://github.com/waggle-sensor/waggle):  
+### Waggle Node:  
 This slang indicates that an AI@Edge computer is running the Waggle software stack.  It is similar to saying “It’s a Linux Box”.  The Linux box could be running a web server or a database, but is running the core Linux software stack.  “A Waggle Node” runs the Waggle encrypted and reliable messaging layers, configuration system, resilience components, adheres to the Waggle security model, provides the AI@Edge runtime libraries, and provides the resource management components to schedule and run Edge docker containers from the Edge Code Repository. 
  
 ### Wild Sage Node:
