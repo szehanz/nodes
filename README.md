@@ -17,3 +17,52 @@ This identifies Waggle Nodes that are standard, commercially available blade ser
 ### [Array of Things (AoT) Node](https://arrayofthings.github.io/):  
 A weatherized Waggle Node designed to be installed on a street pole in the city or mounted on exterior walls.  An AoT node usually includes a sensor pod that includes air quality sensors.  The device is also attractive for an urban setting. 
 
+
+## Types:
+* Wild Sage Node: Waggle Box (Node Controller, WagMan, Edge Processor, Networking)
+* Sage Blade: 19” HPE Rack-mounted node
+
+## Nomenclature:
+* *B1*: 19” HPE Rack-mounted node
+* *S1*: Sage Version 1.0:  Current Waggle Node design with known modifications. 
+* *S2.0*:  Sage Version 2.0:  First small batch 2.0 nodes.  Roughly 20% of build funds.
+* *S2.1*:  Sage Version 2.1:  Production Sage nodes.2.0.
+
+A “Wild Sage Node” has 1 CPU box, and one or more sensors.
+
+## Sensors: 
+ * POE Sensor Set
+ * AoT Stevenson
+ * Optional one external USB sensor
+
+### Design Notes:
+
+#### Components:
+* New enclosure and mounting hardware
+* NC: C2 Node Controller or similar
+* EP: TX2 or similar
+* POE + Edge-processor for Stevenson
+* New Power Supply
+* Include network adapter and external antenna mount
+* Sensors: POE Cameras - Visual+Mic, FLIR
+
+#### Boundary Interfaces:
+* Weatherize connectors / External enclosure break for:
+  - 1 X Ethernet (WAN)
+  - 4 x RJ45: POE Sensors
+  - 1 x USB3: Sensors
+  - 1 x USB2 Slave: Console
+  - 1 X AC Power (male)
+* May include: 3-Color LED (clear weatherized bezel/dome)
+* May include: Small momentary contact pushbutton switch
+
+#### Custom Circuit Boards: 
+ * WagMan V5
+ * Stevenson sensor daughter board: Sound Level, Inertial, Pressure, Temp/RH (AoT Sensor Stack)
+ 
+#### Mounting:
+ * Internal mounts for all boards, heat sinks, power supplies
+ * Interface for Wall or Pole mount
+ * Custom Mounting:
+  - Mount for Pole or Waggle Box
+  - Carrier for METSense & Cameras
