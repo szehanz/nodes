@@ -19,7 +19,8 @@
   1. ~NC - Odroid C1+~ : *retired*
   2. ~EP1 - TX2 on Orbitty Carrier~ : *retired*
   3. ~EP2 - Nvidia Nano~ : *retired*
-  2. EP1/NC : Xavier NX on Photon Carrier
-  3. EP2 : Xavier NX on Photon Carrier
+  4. Stevenson PXIE Boot Processor - RPi 4 (with [PXE BIOS](https://www.raspberrypi.org/documentation/hardware/raspberrypi/booteeprom.md)) with USB ports available for Sensors. Sensors are **not** installed by default. 
+  5. EP1/NC : Xavier NX on Photon Carrier
+  6. EP2 : Xavier NX on Photon Carrier
   
   
