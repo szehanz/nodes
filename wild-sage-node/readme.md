@@ -12,7 +12,7 @@
   1. NC - Odroid C1+
   2. EP1 - TX2 on Orbitty Carrier
   3. EP2 - Nvidia Nano 
-  4. Stevenson PXIE Boot Processor - RPi 4 (with [PXE BIOS](https://www.raspberrypi.org/documentation/hardware/raspberrypi/booteeprom.md)) with USB ports available for Sensors. *No sensors are installed by default*. 
+  4. Stevenson PXIE Boot Processor - RPi 4 (with [PXE BIOS](https://www.raspberrypi.org/documentation/hardware/raspberrypi/booteeprom.md)) with USB ports available for Sensors. Sensors are **not** installed by default. 
   
  #### WSN 2.0: (August ~ September)
  
