@@ -2,8 +2,8 @@
 
 
 1. The Design Files for the Wild Sage Nodes are in - [GoogleDrive-Folder](https://drive.google.com/drive/folders/1bfBQcjiGbpWjJ-5-9kR0VuI9pphP4OmS)
-
 2. The BoM of the Wild Sage nodes are in - [GoogleDrive-Spreadsheet](https://docs.google.com/spreadsheets/d/1yXMznbJ9CUFJLOrCrLSZFgybX5dQweWJO_jY7Df3Bx0/edit#gid=0)
+3. Power/Thermal Budget - [GoogleDrive-Spreadsheet](https://docs.google.com/spreadsheets/d/191e0S9JpdDGDDgbbjihqOHvH8lKUX9_9_QIGlT9iZ1I/edit#gid=0)
 
 ### Salient Features: 
 
