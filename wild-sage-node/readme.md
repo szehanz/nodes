@@ -5,6 +5,7 @@
 2. The BoM of the Wild Sage nodes are in - [GoogleDrive-Spreadsheet](https://docs.google.com/spreadsheets/d/1yXMznbJ9CUFJLOrCrLSZFgybX5dQweWJO_jY7Df3Bx0/edit#gid=0)
 3. Power/Thermal Budget - [GoogleDrive-Spreadsheet](https://drive.google.com/drive/folders/1bfBQcjiGbpWjJ-5-9kR0VuI9pphP4OmS)
 4. Hardware Bring-up Plan - [GoogleDrive-Doc](https://docs.google.com/document/d/1ujgZeuluVEGQspuR-Yy9-tuiA56xIrtFBSd7j6SCOqU)
+5. Design Criteria - [GoogleDrive-Doc](https://docs.google.com/document/d/1Jl-fZVAmSwE50ZH6rUjuYsy42Y6O3PLkL9u-kQhz0SM/edit#)
 
 ### Salient Features: 
 
