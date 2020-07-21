@@ -39,11 +39,11 @@ We'll need to edit the file iso/isolinux/txt.cfg
 
 At the top of the file add the option:
 
-default install
-label autoinstall
-  menu label ^Auto-Install
-  kernel /install/vmlinuz
-  append file=/cdrom/preseed/ubuntu-server.seed initrd=/install/initrd.gz auto=true priority=high preseed/file=/cdrom/preseed/mypreseed.seed preseed/file/checksum=4e8ba65081a3ce9737670a58a35a47d8 --
+default install 
+label autoinstall  
+  menu label ^Auto-Install  
+  kernel /install/vmlinuz  
+  append file=/cdrom/preseed/ubuntu-server.seed initrd=/install/initrd.gz auto=true priority=high preseed/file=/cdrom/preseed/mypreseed.seed preseed/file/checksum=4e8ba65081a3ce9737670a58a35a47d8 --  
   
   
 #### Modifying Grub Configuration
@@ -53,12 +53,13 @@ We'll need to edit the file iso/boot/grub/grub.cfg
 Following the two set menu_color lines
 We need to add the menu entry for our auto-install
 
-set timeout=1
-menuentry "Auto-Install" {
-	set gfxpayload=keep
-	linux /install/vmlinuz append file=/cdrom/preseed/ubuntu-server.seed initrd=/install/initrd.gz auto=true priority=high preseed/file=/cdrom/preseed/mypreseed.seed quiet ---
-	initrd	/install/initrd.gz
+set timeout=1  
+menuentry "Auto-Install" {  
+	set gfxpayload=keep  
+	linux /install/vmlinuz append file=/cdrom/preseed/ubuntu-server.seed initrd=/install/initrd.gz auto=true priority=high preseed/file=/cdrom/preseed/mypreseed.seed quiet ---  
+	initrd	/install/initrd.gz. 
 }
+
 
 ### 5. Generating ISO Image
 
