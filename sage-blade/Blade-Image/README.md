@@ -39,10 +39,15 @@ We'll need to edit the file iso/isolinux/txt.cfg
 At the top of the file add the option:
 
 default install
+
 label autoinstall
+
   menu label ^Auto-Install
+  
   kernel /install/vmlinuz
+  
   append file=/cdrom/preseed/ubuntu-server.seed initrd=/install/initrd.gz auto=true priority=high preseed/file=/cdrom/preseed/mypreseed.seed preseed/file/checksum=4e8ba65081a3ce9737670a58a35a47d8 --
+  
   
 #### Modifying Grub Configuration
 
@@ -52,10 +57,15 @@ Following the two set menu_color lines
 We need to add the menu entry for our auto-install
 
 set timeout=1
+
 menuentry "Auto-Install" {
+
 	set gfxpayload=keep
+	
 	linux /install/vmlinuz append file=/cdrom/preseed/ubuntu-server.seed initrd=/install/initrd.gz auto=true priority=high preseed/file=/cdrom/preseed/mypreseed.seed quiet ---
+	
 	initrd	/install/initrd.gz
+	
 }
 
 ### 5. Generating ISO Image
@@ -63,7 +73,8 @@ menuentry "Auto-Install" {
 From inside the iso directory
 aka cd iso/
 
-Run the following the generate the iso image
+Run the following to generate the iso image
+
 mkisofs -D -r -V "AUTOINSTALL" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o ../autoinstall.iso .
 
 A bootable installable ISO will be placed in the directory before your iso folder with the name autoinstall.iso
