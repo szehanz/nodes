@@ -53,19 +53,12 @@ We'll need to edit the file iso/boot/grub/grub.cfg
 Following the two set menu_color lines
 We need to add the menu entry for our auto-install
 
-{
-
 set timeout=1
 menuentry "Auto-Install" {
-
 	set gfxpayload=keep
 	linux /install/vmlinuz append file=/cdrom/preseed/ubuntu-server.seed initrd=/install/initrd.gz auto=true priority=high preseed/file=/cdrom/preseed/mypreseed.seed quiet ---
 	initrd	/install/initrd.gz
-	
 }
-
-}
-
 
 ### 5. Generating ISO Image
 
