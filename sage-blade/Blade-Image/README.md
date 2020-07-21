@@ -13,6 +13,7 @@ mount -o loop ubuntu-18.04.4-server-amd64.iso /mnt/iso/
 ### 3. Make a copy of image that's not read-only
 
 mkdir iso
+
 cp -rT /mnt/iso/ iso/
 
 ### 4. Modifying ISO Image
