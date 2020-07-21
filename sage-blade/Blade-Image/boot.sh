@@ -11,11 +11,12 @@ umount /dev/sda1
 umount /dev/sda3
 
 mkdir ~/.ssh
-echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEScCdR3mr+QgCnuvGSwsjw1lmatwrHvVvUtEoc7du5vCMTXT25L3rqhaG8Ngy4OTAfVEtSR0qfgJ6UrH1oyacPMBYAETOfnHqKqoi1Dcej9f3+QuBNA7pOIjLK2j>
-echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsYPMSrC6k33vqzulXSx8141ThfNKXiyFxwNxnudLCa0NuE1SZTMad2ottHIgA9ZawcSWOVkAlwkvufh4gjA8LVZYAVGYHHfU/+MyxhK0InI8+FHOPKAnpno1wsTR>
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEScCdR3mr+QgCnuvGSwsjw1lmatwrHvVvUtEoc7du5vCMTXT25L3rqhaG8Ngy4OTAfVEtSR0qfgJ6UrH1oyacPMBYAETOfnHqKqoi1Dcej9f3+QuBNA7pOIjLK2j" > ~/.ssh/authorized_keys
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsYPMSrC6k33vqzulXSx8141ThfNKXiyFxwNxnudLCa0NuE1SZTMad2ottHIgA9ZawcSWOVkAlwkvufh4gjA8LVZYAVGYHHfU/+MyxhK0InI8+FHOPKAnpno1wsTR" >> ~/.ssh/authorized_keys
 
 sed -e 's|overlayroot=""|overlayroot="device:dev=/dev/sda3,timeout=180"|' /etc/overlayroot.conf > tmp.txt
 cp tmp.txt /etc/overlayroot.conf
+rm tmp.txt
 
 #wget https://raw.githubusercontent.com/ozorob2/late_command_pub/master/install-docker-and-nvidia.yml
 #ansible-playbook install-docker-and-nvidia.yml
