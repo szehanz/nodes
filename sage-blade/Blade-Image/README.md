@@ -34,6 +34,12 @@ wget https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Bla
 To make changes to this preseed there exists some documentation via ubuntu on some preseed syntax
 https://help.ubuntu.com/lts/installation-guide/s390x/apbs04.html
 
+--- One important change you might wish to make is to the preseed-late-command, runs after installing the os, which is at the end of the preseed file. In this  preseed the late command grabs a script and runs it at first boot by placing it in /etc/rc.local, you don't need to rebuild the iso everytime you change the script. However, everytime you move the script to a new location you will. 
+
+<pre>
+d-i preseed/late_command string chroot /target curl -L -o /etc/rc.local https://raw.githubusercontent.com/ozorob2/late_command_pub/master/boot.sh ; chroot /target chmod +x /etc/rc.local ;
+</pre>
+
 #### After copying or modifying preseed, copy preseed into iso
 
 <pre>
