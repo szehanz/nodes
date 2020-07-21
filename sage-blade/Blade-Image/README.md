@@ -1,4 +1,4 @@
-## A. Building Custom Unattended OS Image 
+## Building Custom Unattended OS Image 
 
 ### 1. Download Image
 
