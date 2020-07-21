@@ -37,7 +37,7 @@ https://help.ubuntu.com/lts/installation-guide/s390x/apbs04.html
 #### After copying or modifying preseed, copy preseed into iso
 
 <pre>
-cp preseed.seed iso/preseed/
+cp mypreseed.seed iso/preseed/
 </pre>
 
 #### Calculate Seed Checksum
