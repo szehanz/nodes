@@ -7,6 +7,7 @@ wget http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd6
 ### 2. Mount image
 
 mkdir /mnt/iso
+
 mount -o loop ubuntu-18.04.4-server-amd64.iso /mnt/iso/
 
 ### 3. Make a copy of image that's not read-only
