@@ -25,6 +25,11 @@ cp -rT /mnt/iso/ iso/
 #### Adding Preseed File for Unattended Install
 
 Download Preseed (Link, will be included in this repository)
+<pre>
+wget https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/greenhouse.seed
+</pre>
+
+(You will see greenhouse.seed in this folder, including the txt.cfg and grub.cfg, but I use mypreseed.seed as the example)
 
 To make changes to this preseed there exists some documentation via ubuntu on some preseed syntax
 https://help.ubuntu.com/lts/installation-guide/s390x/apbs04.html
