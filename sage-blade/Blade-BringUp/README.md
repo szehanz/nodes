@@ -1,48 +1,37 @@
-<!--
-waggle_topic=IGNORE
--->
+## Bringing up a Dell Blade 
 
-## A. Quick links, anywhere? 
+### 1. Clone Repository
 
-Sure - [here](https://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/status_links.html)
+<pre>
+git clone https://github.com/sagecontinuum/nodes/tree/master/sage-blade/Blade-BringUp
+</pre>
 
-## B. Beehive
+### 2. Prepare/Download Unattended ISO Image
 
-### 1. How do I tell what data is flowing into beehive at this moment? 
+For this step, instructions can be found here: 
+https://github.com/sagecontinuum/nodes/tree/master/sage-blade/Blade-Image
 
-#### Beehive data flow pipeline :
+### 3. Hosting Image Locally on Machine
 
-Currently, __all__ nodes use the v1 pipeline for coresense data. All newer plugins like image data or status data use v2.
-They coexist, and v1 will be deprecated soon.
+To be updated... 
+For now we use apache, eventually we will switch to a GO fileserver that matches machine hardware.
 
-```
-v1 pipeline ---> [ beehive-data-stream-v1 ] ---> Folder:datasets (workerbee)    -----+
-                                                                                     + ---> digests
-v2 pipeline ---> [ beehive-data-stream-v2 ] ---> Folder:datasets-v2 (workerbee) -----+
-```
-The scripts are available [here](https://github.com/waggle-sensor/beehive-server/tree/master/bin), they are installed on beehive. 
+### 4. blade-bringup script usage
 
-The columns are: 
+This script was built using the Redfish iDRAC API library.
+If you are interested in making changes you can find other possible iDRAC commands here:
+https://github.com/dell/iDRAC-Redfish-Scripting/tree/master/Redfish%20Python
 
-__i. V1 pipeline hose__ - [beehive-data-stream-v1](https://github.com/waggle-sensor/beehive-server/blob/master/bin/beehive-data-stream-v1)
-```
-packet arrival timestamp,  sender id, packet timestamp, packet type, packet meta
-```
+Command Line Usage:
+<pre>
+chmod +x blade-bringup.sh
+./blade-bringup.sh <iDRAC IP Adress> <y/n> 
+# (y if iDRAC has had script run on it before)/(n if machine is in fresh state/never used)
 
-__ii. V2 pipleline hose__ - [beehive-data-stream-v2](https://github.com/waggle-sensor/beehive-server/blob/master/bin/beehive-data-stream-v2)
-```
-packet timestamp, sender id, sender sub id, plugin id, plugin version, sensor id, parameter id, value raw
-```
+Example:
+./blade-bringup.sh 192.168.0.10 y
+</pre>
 
-### 2. How do I tell how image and video samples are flowing into beehive at this moment?
+# Script run time averages around 10 minutes, but following the script the OS is still being installed which averages around 20 minutes. The machine will boot up twice after OS is installed because it is running a script to get the machine in preferred state including ssh keys to allow remote access easily.
 
-The nodes that have image and audio samplers running on them store the samples in their local storage. A service running on Beehive takes those samples from the nodes and stores them temporally in Beehive. Then, it runs sanitization on those samples to filter out bad samples (e.g., samples without contents or samples with no interesting information in them). Fianlly, the "good" samples are then transferred into LCRC server for persistent storage. For illustration, see below
-
-```
-   [Waggle nodes]                [Beehive]                     [LCRC]
-       samples      --rsync--     samples       --rsync-- sanitized samples
- in /wagglerw/files           in /storage/files           in designated path
-                           {sanitization running}
-```
-
-Please look at `filesync.service` and `waggle-lcrc-transfer.timer` in Beehive for details. The rsync commands are running periodically and are configurable; the default is an hour.
+Congratulations! You just brought up a Dell Blade!
