@@ -29,15 +29,15 @@ python3 ExportSystemConfigurationLocalREDFISH.py -ip $1 -u root -p waggle -t IDR
 sed -n 16p system.txt
 
 echo "Break SSD RAID"
-python3 ConvertToNonRAIDREDFISH.py -ip $1 -u root -p waggle -n Disk.Bay.7:Enclosure.Internal.0-1:RAID.Integrated.1-1
+python3 ConvertToNonRAIDREDFISH.py -ip $1 -u root -p waggle -n Disk.Bay.7:Enclosure.Internal.0-1:RAID.Integrated.1-1 >> output.txt
 
 echo "Ejecting any possible virtual media connected"
-python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 2 -d 1
+python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 2 -d 1 >>output.txt
 
 echo "Mounting Unattended ISO"
-python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://192.168.0.10/mini.iso
+python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://192.168.0.10/greenhouse.iso >> output.txt
 
 echo "Setting boot to ISO and rebooting"
-python3 SetNextOneTimeBootVirtualMediaDeviceOemREDFISH.py -ip $1 -u root -p waggle -d 1 -r y
+python3 SetNextOneTimeBootVirtualMediaDeviceOemREDFISH.py -ip $1 -u root -p waggle -d 1 -r y >> output.txt
 
 echo "Script Complete, please allow 20 minutes for OS to install and machine to be populated"
