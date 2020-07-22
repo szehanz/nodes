@@ -3,7 +3,8 @@
 ### 1. Clone Repository
 
 <pre>
-git clone https://github.com/sagecontinuum/nodes/tree/master/sage-blade/Blade-BringUp
+git clone https://github.com/sagecontinuum/nodes.git
+cd nodes/sage-blade/Blade-BringUp
 </pre>
 
 ### 2. Prepare/Download Unattended ISO Image
