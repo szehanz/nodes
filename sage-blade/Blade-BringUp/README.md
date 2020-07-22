@@ -17,6 +17,11 @@ https://github.com/sagecontinuum/nodes/tree/master/sage-blade/Blade-Image
 To be updated...  
 For now we use apache, eventually we will switch to a GO fileserver that matches machine hardware.
 
+Line 38 of blade-bringup.sh will need to be modified here, adding in location of your own image hosted locally. IP must be in IPV4 format.
+<pre>
+python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://192.168.0.10/greenhouse.iso >> output.txt
+</pre>
+
 ### 4. blade-bringup script usage
 
 This script was built using the Redfish iDRAC API library.  
