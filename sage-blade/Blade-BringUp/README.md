@@ -25,7 +25,7 @@ https://github.com/dell/iDRAC-Redfish-Scripting/tree/master/Redfish%20Python
 Command Line Usage:
 <pre>
 chmod +x blade-bringup.sh
-./blade-bringup.sh <iDRAC IP Adress> <y/n> 
+./blade-bringup.sh {iDRAC IP Adress} {y/n} 
 # (y if iDRAC has had script run on it before)/(n if machine is in fresh state/never used)
 
 Example:
