@@ -14,7 +14,13 @@ else
 fi
 
 echo "All Previous Data Erased, sleeping for 5 minutes while waiting for iDRAC to reboot"
-sleep 300
+#sleep 300
+secs=$((5 * 60))
+while [ $secs -gt 0 ]; do
+   echo -ne "$secs\033[0K\r"
+   sleep 1
+   : $((secs--))
+done
 
 echo "Setting iDRAC password to Waggle"
 python3 ChangeIdracUserPasswordREDFISH.py -ip $1 -u root -p calvin -id 2 -np waggle >> output.txt
@@ -22,20 +28,37 @@ python3 ChangeIdracUserPasswordREDFISH.py -ip $1 -u root -p calvin -id 2 -np wag
 echo "Turning Blade Back On, and sleeping for 3 minutes for Lifecycle reboot"
 python3 SetPowerStateREDFISH.py -ip $1 -u root -p waggle -r PushPowerButton >> output.txt
 
-sleep 180
+#sleep 180
+secs=$((3 * 60))
+while [ $secs -gt 0 ]; do
+   echo -ne "$secs\033[0K\r"
+   sleep 1
+   : $((secs--))
+done
+
+echo "Rebooting, and waiting 4 minutes to identify system"
+python3 SetPowerStateREDFISH.py -ip $1 -u root -p waggle -r PushPowerButton >> output.txt
+
+#sleep 180
+secs=$((4 * 60))
+while [ $secs -gt 0 ]; do
+   echo -ne "$secs\033[0K\r"
+   sleep 1
+   : $((secs--))
+done
+
+echo "Break SSD RAID"
+python3 ConvertToNonRAIDREDFISH.py -ip $1 -u root -p waggle -n Disk.Bay.7:Enclosure.Internal.0-1:RAID.Integrated.1-1 >> output.txt
 
 echo "Grabbing Machine ID, nowhere to send it for now"
 python3 ExportSystemConfigurationLocalREDFISH.py -ip $1 -u root -p waggle -t IDRAC > system.txt
 sed -n 16p system.txt
 
-echo "Break SSD RAID"
-python3 ConvertToNonRAIDREDFISH.py -ip $1 -u root -p waggle -n Disk.Bay.7:Enclosure.Internal.0-1:RAID.Integrated.1-1 >> output.txt
-
 echo "Ejecting any possible virtual media connected"
-python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 2 -d 1 >>output.txt
+python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 2 -d 1 >> output.txt
 
 echo "Mounting Unattended ISO"
-python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://192.168.0.10/greenhouse.iso >> output.txt
+python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://10.0.0.9/raj/autoinstall.iso >> output.txt
 
 echo "Setting boot to ISO and rebooting"
 python3 SetNextOneTimeBootVirtualMediaDeviceOemREDFISH.py -ip $1 -u root -p waggle -d 1 -r y >> output.txt
