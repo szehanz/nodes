@@ -18,6 +18,22 @@ sed -e 's|overlayroot=""|overlayroot="device:dev=/dev/sda3,timeout=180"|' /etc/o
 cp tmp.txt /etc/overlayroot.conf
 rm tmp.txt
 
+# ensure waggle config directory exists
+mkdir -p /etc/waggle
+
+curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/files/waggle-registration > /usr/bin/waggle-registration
+chmod 755 /usr/bin/waggle-registration
+
+curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/files/waggle-reverse-tunnel > /usr/bin/waggle-reverse-tunnel
+chmod 755 /usr/bin/waggle-reverse-tunnel
+
+curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/files/waggle-registration.service > /etc/systemd/system/waggle-registration.service
+
+curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/files/waggle-reverse-tunnel.service > /etc/systemd/system/waggle-reverse-tunnel.service
+
+systemctl enable waggle-registration.service waggle-reverse-tunnel.service
+echo "140.221.47.67" >> /etc/hosts
+
 #wget https://raw.githubusercontent.com/ozorob2/late_command_pub/master/install-docker-and-nvidia.yml
 #ansible-playbook install-docker-and-nvidia.yml
 
