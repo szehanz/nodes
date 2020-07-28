@@ -32,7 +32,7 @@ curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Bla
 curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/files/waggle-reverse-tunnel.service > /etc/systemd/system/waggle-reverse-tunnel.service
 
 systemctl enable waggle-registration.service waggle-reverse-tunnel.service
-echo "140.221.47.67" >> /etc/hosts
+echo "140.221.47.67 beehive" >> /etc/hosts
 
 #wget https://raw.githubusercontent.com/ozorob2/late_command_pub/master/install-docker-and-nvidia.yml
 #ansible-playbook install-docker-and-nvidia.yml
