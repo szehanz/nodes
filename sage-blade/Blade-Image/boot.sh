@@ -2,13 +2,25 @@
 
 apt-get -y update 
 apt-get -y upgrade 
-apt-get -y install ssh ansible git htop iotop iftop bwm-ng screen nmap docker
+apt-get -y install ssh ansible git htop iotop iftop bwm-ng screen nmap
+
+# Docker install
+apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+apt-key fingerprint 0EBFCD88
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+apt-get -y install docker-ce docker-ce-cli containerd.io
 
 sed -i '/efi/d' /etc/fstab
 sed -i '/home/d' /etc/fstab
 
 umount /dev/sda1
 umount /dev/sda3
+
+echo "tmpfs /var/lib/docker tmpfs rw,mode=1777,size=12g 0 2" >> /etc/fstab
 
 mkdir ~/.ssh
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEScCdR3mr+QgCnuvGSwsjw1lmatwrHvVvUtEoc7du5vCMTXT25L3rqhaG8Ngy4OTAfVEtSR0qfgJ6UrH1oyacPMBYAETOfnHqKqoi1Dcej9f3+QuBNA7pOIjLK2jqbK+VGPHEM9NVKXb8XbcL9mpn+sKy4f2J1kRMD79+5R+8EbV2jVcwwOa/1+bsbF/jtGlmoHD4RbNHrO65Y2BuLpQMYSv4Q0lwwe/pwYSYgCkeD0ve9XfwZktnluYyOQjaTw+qyMpNjfYCfWDHZtKHeUCRcNgpXydcJ6Obc/h9kQQC1ZWU1GDc+BFWwo/ZLrHeedilggUwRTqpM9j3lYPi1NfX /home/rajesh/.ssh/id_rsa_waggle_user" >> ~/.ssh/authorized_keys
