@@ -1,7 +1,7 @@
 #!/bin/bash
 
 apt-get -y update 
-apt-get -y install ssh
+apt-get -y install ssh ansible git htop iotop iftop bwm-ng screen nmap
 
 sed -i '/efi/d' /etc/fstab
 sed -i '/\/media\/sys-data/d' /etc/fstab
