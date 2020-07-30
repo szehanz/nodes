@@ -31,7 +31,15 @@ curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Bla
 systemctl enable waggle-registration.service waggle-reverse-tunnel.service
 echo "140.221.47.67 beehive" >> /etc/hosts
 
+# docker install
 ln -s /media/plugin-data /var/lib/docker
-rm /etc/rc.local
+apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common		
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -		
+add-apt-repository \		
+    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \		
+    $(lsb_release -cs) \		
+    stable"		
+apt-get -y install docker-ce docker-ce-cli containerd.io		
 
+rm /etc/rc.local
 reboot
