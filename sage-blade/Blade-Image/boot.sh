@@ -15,8 +15,10 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsYPMSrC6k33vqzulXSx8141ThfNKXiyFxwN
 
 sed -i 's|overlayroot=""|overlayroot="device:dev=/dev/sda4,timeout=180,recurse=0"|' /etc/overlayroot.conf
 
-#ensure waggle config directory exists
 mkdir -p /etc/waggle
+
+mv /root/id_rsa_waggle_aot_registration /etc/waggle/id_rsa_waggle_registration
+chmod 600 /etc/waggle/id_rsa_waggle_registration
 
 curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/files/waggle-registration > /usr/bin/waggle-registration
 chmod 755 /usr/bin/waggle-registration
@@ -29,7 +31,7 @@ curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Bla
 curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/files/waggle-reverse-tunnel.service > /etc/systemd/system/waggle-reverse-tunnel.service
 
 systemctl enable waggle-registration.service waggle-reverse-tunnel.service
-echo "140.221.47.67 beehive" >> /etc/hosts
+echo "10.0.0.5 beehive" >> /etc/hosts
 
 # docker install
 ln -s /media/plugin-data /var/lib/docker
