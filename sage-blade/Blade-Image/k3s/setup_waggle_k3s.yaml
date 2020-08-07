@@ -3,6 +3,7 @@
   connection: local
   vars:
     user: root
+    image_storage: /media/plugin-data
     ecr_registry: registry_address:5000
   strategy: free
   gather_facts: no
@@ -28,7 +29,7 @@
         mode: "u=rwx,g=rx,o=rx"
     - name: copy ecr registry
       copy:
-        src: etc/rancher/k3s/registries.yaml
+        src: registries.yaml
         dest: /home/{{ user }}/sage/k3s/registries.yaml
         owner: "{{ user }}"
         group: "{{ user }}"
@@ -38,6 +39,11 @@
         path: /home/{{ user }}/sage/k3s/registries.yaml
         regexp: '\$\{ECR_REGISTRY\}'
         replace: "{{ ecr_registry }}"
+    - name: create k3s image storage directory
+      file:
+        path: "{{ image_storage }}"
+        state: directory
+        mode: "u=rwx,g=rx,o=rx"
     - name: create a new waggle-k3s cluster
       shell: |
         k3d create cluster waggle-k3s \
