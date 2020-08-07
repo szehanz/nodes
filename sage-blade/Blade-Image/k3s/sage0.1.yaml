@@ -1,0 +1,38 @@
+body:
+  app_config:
+  - default:
+    - conditions:
+      - 'True'
+    - spec:
+        containers:
+        - args: '[]'
+          image: sagecontinuum/smoke-detector:0.4.0
+          name: smoke-detector
+          resources:
+            limits:
+            - cpu: 1000m
+            - memory: 300Mi
+  rules: []
+  sensor_config:
+    spec:
+      containers:
+      - image: waggle/rabbitmq:nc
+        name: rabbitmq
+        resources:
+          limits:
+          - cpu: 1500m
+          - memory: 256Mi
+      - args: '[''-device'', ''/dev/waggle_cam_bottom'']'
+        image: waggle/media-streamer:0.1.0
+        name: cam_bottom_live
+        resources:
+          limits:
+          - cpu: 1300m
+          - memory: 50Mi
+header:
+  goal_id: 2a296424-d5d0-461e-b496-19ab35b71ae9
+  goal_name: sage 0.1
+  priority: 90
+  target_nodes:
+  - 001e06107e48
+  user_id: gemblerz
