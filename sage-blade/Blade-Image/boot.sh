@@ -41,5 +41,15 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(
 apt-get -y update 
 apt-get -y install docker-ce docker-ce-cli containerd.io		
 
+curl -L -o /etc/waggle/registries.yaml https://raw.githubusercontent.com/sagecontinuum/nodes/k3d-docker-upgrade/sage-blade/Blade-Image/k3s/registries.yaml
+curl -L -o /etc/waggle/deliver_sage0.1_app.yaml https://raw.githubusercontent.com/sagecontinuum/nodes/k3d-docker-upgrade/sage-blade/Blade-Image/k3s/deliver_sage0.1_app.yaml
+curl -L -o /etc/waggle/install_waggle_k3s.yaml https://raw.githubusercontent.com/sagecontinuum/nodes/k3d-docker-upgrade/sage-blade/Blade-Image/k3s/install_waggle_k3s.yaml
+curl -L -o /etc/waggle/sage0.1.yaml https://raw.githubusercontent.com/sagecontinuum/nodes/k3d-docker-upgrade/sage-blade/Blade-Image/k3s/sage0.1.yaml
+curl -L -o /etc/waggle/setup_waggle_k3s.yaml https://raw.githubusercontent.com/sagecontinuum/nodes/k3d-docker-upgrade/sage-blade/Blade-Image/k3s/setup_waggle_k3s.yaml
+
+ansible-playbook /etc/waggle/install_waggle_k3s.yaml
+ansible-playbook /etc/waggle/setup_waggle_k3s.yaml
+ansible-playbook /etc/waggle/deliver_sage0.1_app.yaml
+
 rm /etc/rc.local
 reboot
