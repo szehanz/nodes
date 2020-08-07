@@ -51,7 +51,7 @@ echo "Ejecting any possible virtual media connected" | xargs -L 1 echo `date +'[
 python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 2 -d 1 | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
 
 echo "Mounting Unattended ISO" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://10.0.0.9/raj/autoinstall.iso | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
+python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://10.0.0.10/greenhouse.iso | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
 
 echo "Setting boot to ISO and rebooting" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
 python3 SetNextOneTimeBootVirtualMediaDeviceOemREDFISH.py -ip $1 -u root -p waggle -d 1 -r y | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
