@@ -1,0 +1,4 @@
+mirrors:
+  ecr.io:
+    endpoint:
+      - "http://${ECR_REGISTRY}"
