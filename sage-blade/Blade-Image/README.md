@@ -13,11 +13,12 @@ mkdir /mnt/iso
 mount -o loop ubuntu-18.04.4-server-amd64.iso /mnt/iso/  
 </pre>
 
-### 3. Make a copy of image that's not read-only
+### 3. Make a copy of image that's not read-only (and copy beehive registration key to appropriate location)
 
 <pre>
 mkdir iso  
 cp -rT /mnt/iso/ iso/  
+cp beehive_registration iso/id_rsa_waggle_aot_registration
 </pre>
 
 ### 4. Modifying ISO Image
