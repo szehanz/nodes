@@ -14,7 +14,10 @@ https://github.com/sagecontinuum/nodes/tree/master/sage-blade/Blade-Image
 
 ### 3. Hosting Image Locally on Machine
 
-To be updated...  
+Image is now hosted automatically for linux users by grabbing your IP with hostname -I and hosting the file locally using a Go fileserver based on your hardware.
+
+/*
+
 For now we use apache, eventually we will switch to a GO fileserver that matches machine hardware.
 
 Line 38 of blade-bringup.sh will need to be modified here, adding in location of your own image hosted locally. IP must be in IPV4 format.
@@ -22,6 +25,7 @@ Line 38 of blade-bringup.sh will need to be modified here, adding in location of
 python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://192.168.0.10/greenhouse.iso >> output.txt
 </pre>
 
+*/
 ### 4. blade-bringup script usage
 
 This script was built using the Redfish iDRAC API library.  
@@ -31,12 +35,12 @@ https://github.com/dell/iDRAC-Redfish-Scripting/tree/master/Redfish%20Python
 Command Line Usage:
 <pre>
 chmod +x blade-bringup.sh
-./blade-bringup.sh {iDRAC IP Adress}
+./blade-bringup.sh {iDRAC IP Adress} {Encryption key}
 
 Example:
-./blade-bringup.sh 192.168.0.10
+./blade-bringup.sh 192.168.0.10 abc123
 </pre>
 
-#### Script run time averages around 10 minutes, but following the script the OS is still being installed which averages around 20 minutes. The machine will boot up twice after OS is installed because it is running a script to get the machine in preferred state including ssh keys to allow remote access easily.
+#### Script run time averages around 15 minutes, but following the script the OS is still being installed which averages around 20 minutes. The machine will boot up twice after OS is installed because it is running a script to get the machine in preferred state including ssh keys to allow remote access easily.
 
 Congratulations! You just brought up a Dell Blade!
