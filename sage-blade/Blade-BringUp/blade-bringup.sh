@@ -50,8 +50,27 @@ sed -n 16p system.txt
 echo "Ejecting any possible virtual media connected" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
 python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 2 -d 1 | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
 
+echo "Downloading Encrypted Unattended ISO" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
+#(wget download link to encrypted iso to be pasted later)
+
+echo "Decrypting Unattended ISO" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
+openssl aes-256-ecb -d -in greenhouse.iso.enc -out greenhouse.iso -k $2 >> error.log
+
+echo "Setting up Go fileserver based on your hardware" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
+hw=$(uname -m)
+if  [[ $hw  == 'armv7l' ]]
+then
+	chmod +x bin/fileserver.linux-arm
+	( bin/fileserver.linux-arm -root   . )&
+else
+	chmod +x bin/fileserver.linux-amd64
+	( bin/fileserver.linux-amd64 -root . )&
+fi
+
+IP=$(printf "%s" $(hostname -I | cut -f1 -d' '))
+
 echo "Mounting Unattended ISO" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://10.0.0.10/greenhouse.iso | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
+python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://$IP:8080/greenhouse.iso | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
 
 echo "Setting boot to ISO and rebooting" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
 python3 SetNextOneTimeBootVirtualMediaDeviceOemREDFISH.py -ip $1 -u root -p waggle -d 1 -r y | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
