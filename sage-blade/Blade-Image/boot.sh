@@ -1,107 +1,55 @@
-# regional setting
-d-i debian-installer/language                               string      en_US:en
-d-i debian-installer/country                                string      US
-d-i debian-installer/locale                                 string      en_US
-d-i debian-installer/splash                                 boolean     false
-d-i localechooser/supported-locales                         multiselect en_US.UTF-8
-d-i pkgsel/install-language-support                         boolean     true
+#!/bin/bash
 
-# keyboard selection
-d-i console-setup/ask_detect                                boolean     false
-d-i keyboard-configuration/modelcode                        string      pc105
-d-i keyboard-configuration/layoutcode                       string      us
-d-i keyboard-configuration/variantcode                      string      intl
-d-i keyboard-configuration/xkb-keymap                       select      us(intl)
-d-i debconf/language                                        string      en_US:en
+apt-get -y update 
+apt-get -y install ssh ansible git htop iotop iftop bwm-ng screen nmap
 
-# network settings
-d-i netcfg/choose_interface                                 select      auto
-d-i netcfg/dhcp_timeout                                     string      5
-d-i netcfg/get_hostname                                     string      greenhouse
-d-i netcfg/get_domain                                       string      greenhouse
+sed -i '/efi/d' /etc/fstab
+sed -i '/\/media\/sys-data/d' /etc/fstab
 
-# mirror settings
-d-i mirror/country                                          string      manual
-d-i mirror/http/hostname                                    string      archive.ubuntu.com
-d-i mirror/http/directory                                   string      /ubuntu
-d-i mirror/http/proxy                                       string
+umount /boot/efi
+umount /media/sys-data
 
-# clock and timezone settings
-d-i time/zone                                               string      UTC
-d-i clock-setup/utc                                         boolean     true
-d-i clock-setup/ntp                                         boolean     true
+mkdir ~/.ssh
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEScCdR3mr+QgCnuvGSwsjw1lmatwrHvVvUtEoc7du5vCMTXT25L3rqhaG8Ngy4OTAfVEtSR0qfgJ6UrH1oyacPMBYAETOfnHqKqoi1Dcej9f3+QuBNA7pOIjLK2jqbK+VGPHEM9NVKXb8XbcL9mpn+sKy4f2J1kRMD79+5R+8EbV2jVcwwOa/1+bsbF/jtGlmoHD4RbNHrO65Y2BuLpQMYSv4Q0lwwe/pwYSYgCkeD0ve9XfwZktnluYyOQjaTw+qyMpNjfYCfWDHZtKHeUCRcNgpXydcJ6Obc/h9kQQC1ZWU1GDc+BFWwo/ZLrHeedilggUwRTqpM9j3lYPi1NfX /home/rajesh/.ssh/id_rsa_waggle_user" >> ~/.ssh/authorized_keys
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsYPMSrC6k33vqzulXSx8141ThfNKXiyFxwNxnudLCa0NuE1SZTMad2ottHIgA9ZawcSWOVkAlwkvufh4gjA8LVZYAVGYHHfU/+MyxhK0InI8+FHOPKAnpno1wsTRxU92xYAYIwAz0tFmhhIgnraBfkJAVKrdezE/9P6EmtKCiJs9At8FjpQPUamuXOy9/yyFOxb8DuDfYepr1M0u1vn8nTGjXUrj7BZ45VJq33nNIVu8ScEdCN1b6PlCzLVylRWnt8+A99VHwtVwt2vHmCZhMJa3XE7GqoFocpp8TxbxsnzSuEGMs3QzwR9vHZT9ICq6O8C1YOG6JSxuXupUUrHgd /home/rajesh/.ssh/id_rsa_waggle_aot" >> ~/.ssh/authorized_keys
 
-# user account setup
-d-i passwd/root-login                                       boolean     true
-d-i passwd/make-user                                        boolean     false
-d-i passwd/root-password 				    password    pass
-d-i passwd/root-password-again 			            password    pass
-d-i user-setup/allow-password-weak                          boolean     true
+sed -i 's|overlayroot=""|overlayroot="device:dev=/dev/sda4,timeout=180,recurse=0"|' /etc/overlayroot.conf
 
-# configure apt
-d-i apt-setup/restricted                                    boolean     true
-d-i apt-setup/universe                                      boolean     true
-d-i apt-setup/backports                                     boolean     true
-d-i apt-setup/services-select                               multiselect security
-d-i apt-setup/security_host                                 string      security.ubuntu.com
-d-i apt-setup/security_path                                 string      /ubuntu
-tasksel tasksel/first                                       multiselect Basic Ubuntu server
-d-i pkgsel/upgrade                                          select      safe-upgrade
-d-i pkgsel/update-policy                                    select      none
-d-i pkgsel/updatedb                                         boolean     true
+mkdir -p /etc/waggle
 
-# disk partitioning
-d-i preseed/early_command string umount /media || true
-d-i partman/alignment string cylinder
-d-i partman/confirm_write_new_label boolean true
-d-i partman-basicfilesystems/choose_label string gpt
-d-i partman-basicfilesystems/default_label string gpt
-d-i partman-partitioning/choose_label string gpt
-d-i partman-partitioning/default_label string gpt
-d-i partman/choose_label string gpt
-d-i partman/default_label string gpt
+mv /root/id_rsa_waggle_aot_registration /etc/waggle/id_rsa_waggle_registration
+chmod 600 /etc/waggle/id_rsa_waggle_registration
 
-d-i partman-auto/method string regular
-d-i partman-auto/choose_recipe select gpt-boot-root-swap
-d-i partman-auto/expert_recipe string         \
-   gpt-boot-root-swap ::                      \
-      200 200 200 fat32                       \
-         $primary{ }                          \
-         method{ efi } format{ } .            \
-      5000 250 5000 linux-swap                \
-         $primary{ }                          \
-         method{ swap } format{ } .           \
-      250000 350 250001 ext4                  \
-         $primary{ }                          \
-         method{ format } format{ }           \
-         use_filesystem{ } filesystem{ ext4 } \
-         mountpoint{ /media/plugin-data } .   \
-      550000 512 550001 ext4                  \
-         $primary{ }                          \
-         method{ format } format{ }           \
-         use_filesystem{ } filesystem{ ext4 } \
-         mountpoint{ /media/sys-data } .      \
-      12000 20000 12001 ext4                  \
-         $primary{ } $bootable{ }             \
-         method{ format } format{ }           \
-         use_filesystem{ } filesystem{ ext4 } \
-         mountpoint{ / } .                    
+curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/files/waggle-registration > /usr/bin/waggle-registration
+chmod 755 /usr/bin/waggle-registration
 
-d-i partman-partitioning/confirm_write_new_label boolean true
-d-i partman/choose_partition select finish
-d-i partman/confirm boolean true
-d-i partman/confirm_nooverwrite boolean true
+curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/files/waggle-reverse-tunnel > /usr/bin/waggle-reverse-tunnel
+chmod 755 /usr/bin/waggle-reverse-tunnel
 
-# grub boot loader
-d-i grub-installer/only_debian                              boolean     true
-d-i grub-installer/with_other_os                            boolean     true
+curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/files/waggle-registration.service > /etc/systemd/system/waggle-registration.service
 
-# finish installation
-d-i finish-install/reboot_in_progress                       note
-d-i finish-install/keep-consoles                            boolean     false
-d-i cdrom-detect/eject                                      boolean     true
-d-i debian-installer/exit/halt                              boolean     false
-d-i debian-installer/exit/poweroff                          boolean     false
+curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Blade-Image/files/waggle-reverse-tunnel.service > /etc/systemd/system/waggle-reverse-tunnel.service
 
-# setup firstrun script
-d-i preseed/late_command 				    string      chroot /target curl -L -o /etc/rc.local https://raw.githubusercontent.com/sagecontinuum/nodes/k3d-docker-upgrade/sage-blade/Blade-Image/boot.sh ; chroot /target chmod +x /etc/rc.local ; cp /cdrom/id_rsa_waggle_aot_registration /target/root/id_rsa_waggle_aot_registration
+systemctl enable waggle-registration.service waggle-reverse-tunnel.service
+echo "140.221.47.67 beehive" >> /etc/hosts
+
+# docker install
+ln -s /media/plugin-data /var/lib/docker
+apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common		
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -		
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+apt-get -y update 
+apt-get -y install docker-ce docker-ce-cli containerd.io		
+
+curl -L -o /etc/waggle/registries.yaml https://raw.githubusercontent.com/sagecontinuum/nodes/k3d-docker-upgrade/sage-blade/Blade-Image/k3s/registries.yaml
+curl -L -o /etc/waggle/deliver_sage0.1_app.yaml https://raw.githubusercontent.com/sagecontinuum/nodes/k3d-docker-upgrade/sage-blade/Blade-Image/k3s/deliver_sage0.1_app.yaml
+curl -L -o /etc/waggle/install_waggle_k3s.yaml https://raw.githubusercontent.com/sagecontinuum/nodes/k3d-docker-upgrade/sage-blade/Blade-Image/k3s/install_waggle_k3s.yaml
+curl -L -o /etc/waggle/sage0.1.yaml https://raw.githubusercontent.com/sagecontinuum/nodes/k3d-docker-upgrade/sage-blade/Blade-Image/k3s/sage0.1.yaml
+curl -L -o /etc/waggle/setup_waggle_k3s.yaml https://raw.githubusercontent.com/sagecontinuum/nodes/k3d-docker-upgrade/sage-blade/Blade-Image/k3s/setup_waggle_k3s.yaml
+
+ansible-playbook /etc/waggle/install_waggle_k3s.yaml
+ansible-playbook /etc/waggle/setup_waggle_k3s.yaml
+ansible-playbook /etc/waggle/deliver_sage0.1_app.yaml
+
+rm /etc/rc.local
+reboot
