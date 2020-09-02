@@ -33,6 +33,19 @@ curl https://raw.githubusercontent.com/sagecontinuum/nodes/master/sage-blade/Bla
 systemctl enable waggle-registration.service waggle-reverse-tunnel.service
 echo "140.221.47.67 beehive" >> /etc/hosts
 
+#console com2 config
+cat << EOF | tee /etc/default/grub
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=1
+GRUB_DISTRIBUTOR=\`lsb_release -i -s 2> /dev/null || echo Debian\`
+GRUB_CMDLINE_LINUX_DEFAULT=""
+GRUB_CMDLINE_LINUX="console=tty1 console=ttyS0,115200"
+GRUB_TERMINAL="console serial"
+GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
+EOF
+
+grub-mkconfig -o /boot/grub/grub.cfg
+
 # docker install
 ln -s /media/plugin-data /var/lib/docker
 apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common		
