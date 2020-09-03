@@ -7,40 +7,50 @@ git clone https://github.com/sagecontinuum/nodes.git
 cd nodes/sage-blade/Blade-BringUp
 </pre>
 
-### 2. Prepare/Download Unattended ISO Image
-
-For this step, instructions can be found here:  
-https://github.com/sagecontinuum/nodes/tree/master/sage-blade/Blade-Image
-
-### 3. Hosting Image Locally on Machine
-
-Image is now hosted automatically for linux users by grabbing your IP with hostname -I and hosting the file locally using a Go fileserver based on your hardware.
-
-/*
-
-For now we use apache, eventually we will switch to a GO fileserver that matches machine hardware.
-
-Line 38 of blade-bringup.sh will need to be modified here, adding in location of your own image hosted locally. IP must be in IPV4 format.
-<pre>
-python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://192.168.0.10/greenhouse.iso >> output.txt
-</pre>
-
-*/
-### 4. blade-bringup script usage
-
-This script was built using the Redfish iDRAC API library.  
-If you are interested in making changes you can find other possible iDRAC commands here:  
-https://github.com/dell/iDRAC-Redfish-Scripting/tree/master/Redfish%20Python
+### 2. blade-bringup script usage
 
 Command Line Usage:
 <pre>
 chmod +x blade-bringup.sh
-./blade-bringup.sh {iDRAC IP Adress} {Encryption key}
+./blade-bringup.sh {OS-Image IP Adress} {iDRAC IP Adress} {Port (default: 22)}
 
 Example:
-./blade-bringup.sh 192.168.0.10 abc123
+./blade-bringup.sh 10.0.0.50 192.168.0.10 52320
+./blade-bringup.sh 10.0.0.50 192.168.0.10
 </pre>
 
 #### Script run time averages around 15 minutes, but following the script the OS is still being installed which averages around 20 minutes. The machine will boot up twice after OS is installed because it is running a script to get the machine in preferred state including ssh keys to allow remote access easily.
+
+### 3. Post-Scipt Installation
+
+After the OS has been installed on the machine there is still work to do. After waiting the allotted time for the OS to be installed, ~20 minutes, you need to ssh to the iDRAC IP address.
+
+<pre>
+ssh root@{iDRAC IP Adress}
+
+or 
+
+sshpass -p waggle ssh root@{iDRAC IP Adress}
+</pre>
+
+#### Password at this point should be 'waggle' 
+
+Once you've connected, we need to start talking to the blade itself through the com2 port.
+
+<pre>
+console com2
+</pre>
+
+Now, we can execute the script that should connect us to the beehive and get the machine in it's correct initial state.
+
+<pre>
+chmod +x manual-first-boot.sh
+./manual-first-boot.sh
+...
+reboot
+</pre>
+
+#### Please contact ozorob@anl.gov for decryption key, if you think you should have access.
+Finally, simply reboot the machine.
 
 Congratulations! You just brought up a Dell Blade!

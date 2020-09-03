@@ -1,14 +1,49 @@
 #!/bin/bash
+source ./utils
 
-echo -e "Connecting to iDRAC at $1" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
+port=22
+imageIP=-1
+iDracIP=-1
+
+# Validate Parameters
+if [[ -n "$1" && -n "$2" ]]
+then
+	imageIP=$1
+	iDracIP=$2
+	
+	if [[ -n "$3" &&  "$3" -eq "$3" ]] && [[ $3 -ge 0 && $3 -le 65353 ]]
+	then
+        	port=$3
+	elif [[ -n "$3" && ! "$3" -eq "$3" ]] || [[ -n "$3" && ! $3 -ge 0 || ! $3 -le 65353 ]]
+	then
+		echo "The port entered is invalid please enter a port in valid range, 0 to 65353, or none at all for default 22"
+		exit 1
+	fi
+	
+	if ! valid_ip $imageIP || ! valid_ip $iDracIP
+	then
+		echo "One or both of the IP's you entered are not valid, IP addresses must be in IPV4 i.e. x.x.x.x where x => 0 and <= 255"
+		exit 1
+	fi
+else
+	echo "Missing a Neccessary Parameter"
+	echo "Usage: "
+	echo "./blade-bringup.sh [Image IP Address] [iDRAC IP Address] [iDRAC Port, optional, default 22]"
+	echo "./blade-bringup.sh 192.168.9.1 192.168.9.2 58302"
+	echo "./blade-bringup.sh 192.168.9.1 192.168.9.2"
+	exit 1
+fi
+
+
+echo -e "Connecting to iDRAC at $iDracIP w/ port $port" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
 
 echo "Erasing all previous data and settings" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-python3 SystemEraseREDFISH.py -ip $1 -u root -p calvin -c AllApps,BIOS,CryptographicErasePD,DIAG,DrvPack,IDRAC,LCData,OverwritePD,PERCNVCache | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` > error.log
-python3 SystemEraseREDFISH.py -ip $1 -u root -p waggle -c AllApps,BIOS,CryptographicErasePD,DIAG,DrvPack,IDRAC,LCData,OverwritePD,PERCNVCache | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
+sshpass -p calvin ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -o IdentitiesOnly=yes root@$iDracIP -p $port systemerase bios,diag,drvpack,idrac,lcdata,allapps,cryptographicerasepd,overwritepd,percnvcache,vflash,nvdimm | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
+sshpass -p waggle ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -o IdentitiesOnly=yes root@$iDracIP -p $port systemerase bios,diag,drvpack,idrac,lcdata,allapps,cryptographicerasepd,overwritepd,percnvcache,vflash,nvdimm | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
 
-echo "All Previous Data Erased, sleeping for 5 minutes while waiting for iDRAC to reboot" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-#sleep 300
-secs=$((5 * 60))
+echo "All Previous Data Erased, sleeping for 12 minutes while waiting for system erase & iDRAC to reboot" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
+
+secs=$((12 * 60))
 while [ $secs -gt 0 ]; do
    echo -ne "$secs\033[0K\r"
    sleep 1
@@ -16,13 +51,12 @@ while [ $secs -gt 0 ]; do
 done
 
 echo "Setting iDRAC password to Waggle" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` 
-python3 ChangeIdracUserPasswordREDFISH.py -ip $1 -u root -p calvin -id 2 -np waggle | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
+sshpass -p calvin ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=quiet -o IdentitiesOnly=yes root@$iDracIP -p $port set iDRAC.Users.2.Password waggle | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
 
-echo "Turning Blade Back On, and sleeping for 3 minutes for Lifecycle reboot" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-python3 SetPowerStateREDFISH.py -ip $1 -u root -p waggle -r PushPowerButton | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
+echo "Turning Blade Back On, and sleeping for 4 minutes for Lifecycle reboot" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
+sshpass -p waggle ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=quiet -o IdentitiesOnly=yes root@$iDracIP -p $port serveraction powerup | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
 
-#sleep 180
-secs=$((3 * 60))
+secs=$((4 * 60))
 while [ $secs -gt 0 ]; do
    echo -ne "$secs\033[0K\r"
    sleep 1
@@ -30,9 +64,8 @@ while [ $secs -gt 0 ]; do
 done
 
 echo "Rebooting, and waiting 4 minutes to identify system" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-python3 SetPowerStateREDFISH.py -ip $1 -u root -p waggle -r PushPowerButton | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
+sshpass -p waggle ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=quiet -o IdentitiesOnly=yes root@$iDracIP -p $port serveraction powerup | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
 
-#sleep 180
 secs=$((4 * 60))
 while [ $secs -gt 0 ]; do
    echo -ne "$secs\033[0K\r"
@@ -41,38 +74,27 @@ while [ $secs -gt 0 ]; do
 done
 
 echo "Break SSD RAID" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-python3 ConvertToNonRAIDREDFISH.py -ip $1 -u root -p waggle -n Disk.Bay.7:Enclosure.Internal.0-1:RAID.Integrated.1-1 | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
 
-echo "Grabbing Machine ID, nowhere to send it for now" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-python3 ExportSystemConfigurationLocalREDFISH.py -ip $1 -u root -p waggle -t IDRAC > system.txt
-sed -n 16p system.txt
+sshpass -p waggle ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=quiet -o IdentitiesOnly=yes root@$iDracIP -p $port storage converttononraid:Disk.Bay.7:Enclosure.Internal.0-1:RAID.Integrated.1-1 | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
+sshpass -p waggle ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=quiet -o IdentitiesOnly=yes root@$iDracIP -p $port jobqueue create RAID.Integrated.1-1 --realtime | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
+
+echo "Breaking Raid, sleeping for 2 minutes" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
+secs=$((2 * 60))
+while [ $secs -gt 0 ]; do
+   echo -ne "$secs\033[0K\r"
+   sleep 1
+   : $((secs--))
+done
 
 echo "Ejecting any possible virtual media connected" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 2 -d 1 | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
-
-echo "Downloading Encrypted Unattended ISO" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-#(wget download link to encrypted iso to be pasted later)
-
-echo "Decrypting Unattended ISO" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-openssl aes-256-ecb -d -in greenhouse.iso.enc -out greenhouse.iso -k $2 >> error.log
-
-echo "Setting up Go fileserver based on your hardware" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-hw=$(uname -m)
-if  [[ $hw  == 'armv7l' ]]
-then
-	chmod +x bin/fileserver.linux-arm
-	( bin/fileserver.linux-arm -root   . )&
-else
-	chmod +x bin/fileserver.linux-amd64
-	( bin/fileserver.linux-amd64 -root . )&
-fi
-
-IP=$(printf "%s" $(hostname -I | cut -f1 -d' '))
+sshpass -p waggle ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=quiet -o IdentitiesOnly=yes root@$iDracIP -p $port remoteimage -d | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
 
 echo "Mounting Unattended ISO" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-python3 InsertEjectVirtualMediaREDFISH.py -ip $1 -u root -p waggle -o 1 -d 1 -i http://$IP:8080/greenhouse.iso | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
+sshpass -p waggle ssh -o StrictHostKeyChecking=no -o IdentitiesOnly=yes -o LogLevel=quiet -o UserKnownHostsFile=/dev/null root@$iDracIP -p $port remoteimage -c -l http://$imageIP/blade-image.iso | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
 
 echo "Setting boot to ISO and rebooting" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
-python3 SetNextOneTimeBootVirtualMediaDeviceOemREDFISH.py -ip $1 -u root -p waggle -d 1 -r y | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'` >> error.log
+
+sshpass -p waggle ssh -o StrictHostKeyChecking=no -o IdentitiesOnly=yes -o LogLevel=quiet -o UserKnownHostsFile=/dev/null root@$iDracIP -p $port racadm config -g cfgServerInfo -o cfgServerFirstBootDevice vCD-DVD | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
+sshpass -p waggle ssh -o StrictHostKeyChecking=no -o IdentitiesOnly=yes -o LogLevel=quiet -o UserKnownHostsFile=/dev/null root@$iDracIP -p $port serveraction powercycle | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
 
 echo "Script Complete, please allow 20 minutes for OS to install and machine to be populated" | xargs -L 1 echo `date +'[%Y-%m-%d %H:%M:%S]'`
