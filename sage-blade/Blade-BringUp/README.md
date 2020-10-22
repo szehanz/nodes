@@ -19,18 +19,18 @@ Example:
 ./blade-bringup.sh 10.0.0.50 192.168.0.10
 </pre>
 
-#### Script run time averages around 15 minutes, but following the script the OS is still being installed which averages around 20 minutes. The machine will boot up twice after OS is installed because it is running a script to get the machine in preferred state including ssh keys to allow remote access easily.
+#### Script run time averages around 15 minutes, but following the script the OS is still being installed which averages around 20 minutes. The machine will boot up twice after OS is installed because it is running a service to get the machine in preferred state.
 
 ### 3. Post-Scipt Installation
 
 After the OS has been installed on the machine there is still work to do. After waiting the allotted time for the OS to be installed, ~20 minutes, you need to ssh to the iDRAC IP address.
 
 <pre>
-ssh root@{iDRAC IP Adress}
+ssh root@{iDRAC IP Address}
 
 or 
 
-sshpass -p waggle ssh root@{iDRAC IP Adress}
+sshpass -p waggle ssh root@{iDRAC IP Address}
 </pre>
 
 #### Password at this point should be 'waggle' 
@@ -44,13 +44,16 @@ console com2
 Now, we can execute the script that should connect us to the beehive and get the machine in it's correct initial state.
 
 <pre>
-chmod +x manual-first-boot.sh
-./manual-first-boot.sh
-...
-reboot
+/etc/waggle/unlock_registration.sh
+# Still need to configure network
+# For DHCP
+rm /etc/NetworkManager/conf.d/99-disabled.conf
+# For static interface configurations
+# modify /etc/network/interfaces and read top comment for more information
+# Finally restart Network-Manger service
+systemctl restart NetworkManager
 </pre>
 
 #### Please contact ozorob@anl.gov for decryption key, if you think you should have access.
-Finally, simply reboot the machine.
 
 Congratulations! You just brought up a Dell Blade!

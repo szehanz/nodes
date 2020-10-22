@@ -17,12 +17,20 @@ then
 	elif [[ -n "$3" && ! "$3" -eq "$3" ]] || [[ -n "$3" && ! $3 -ge 0 || ! $3 -le 65353 ]]
 	then
 		echo "The port entered is invalid please enter a port in valid range, 0 to 65353, or none at all for default 22"
+		echo "Usage: "
+        	echo "./blade-bringup.sh [Image IP Address] [iDRAC IP Address] [iDRAC Port, optional, default 22]"
+        	echo "./blade-bringup.sh 192.168.9.1 192.168.9.2 58302"
+        	echo "./blade-bringup.sh 192.168.9.1 192.168.9.2"
 		exit 1
 	fi
 	
 	if ! valid_ip $imageIP || ! valid_ip $iDracIP
 	then
 		echo "One or both of the IP's you entered are not valid, IP addresses must be in IPV4 i.e. x.x.x.x where x => 0 and <= 255"
+		echo "Usage: "
+        	echo "./blade-bringup.sh [Image IP Address] [iDRAC IP Address] [iDRAC Port, optional, default 22]"
+        	echo "./blade-bringup.sh 192.168.9.1 192.168.9.2 58302"
+        	echo "./blade-bringup.sh 192.168.9.1 192.168.9.2"
 		exit 1
 	fi
 else
