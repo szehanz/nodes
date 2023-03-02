@@ -54,6 +54,6 @@ rm /etc/NetworkManager/conf.d/99-disabled.conf
 systemctl restart NetworkManager
 </pre>
 
-#### Please contact ozorob@anl.gov for decryption key, if you think you should have access.
+#### Please contact us via https://docs.waggle-edge.ai/docs/contact-us for decryption key, if you think you should have access.
 
 Congratulations! You just brought up a Dell Blade!
